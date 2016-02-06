@@ -41,7 +41,11 @@ extern "C"
       }
       else
       {
-          ST->ConOut->OutputString(ST->ConOut,(CHAR16*) L"Wait Key succeded\n\r");
+          ST->ConIn->ReadKeyStroke(ST->ConIn, &Key);
+         CHAR16 wc[2] = {Key.UnicodeChar,0};
+          CHAR16 buf[128];
+          SPrint(buf,sizeof(buf),(CHAR16*)L"Wait Key success %S\n\r",wc);
+          ST->ConOut->OutputString(ST->ConOut, buf);
       }
    
       return EFI_SUCCESS;

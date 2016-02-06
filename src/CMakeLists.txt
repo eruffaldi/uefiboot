@@ -1,13 +1,17 @@
-set(GNUEFI $(PROJECT_SOURCE_DIR)/gnu_efi/)
+set(GNUEFI ${PROJECT_SOURCE_DIR}/gnu_efi)
 
--ffreestanding -Ipath/to/gnu-efi/inc -Ipath/to/gnu-efi/inc/x86_64 -Ipath/to/gnu-efi/protocol 
-
-include_directories(${GNUEFI}/inc ${GNUEFI}/inc/x86_64 ${GNUEFI}/protocol)
+include_directories(${GNUEFI}/inc ${GNUEFI}/inc/x86_64 ${GNUEFI}/inc/protocol ${GNUEFI}/lib)
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -ffreestanding)
 set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -ffreestanding)
 
-set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} -nostdlib -Wl,-dll -shared -Wl,--subsystem,10 -e efi_main -lgcc)
+set(LDFLAGS -nostdlib -Wl,-dll -shared -Wl,--subsystem,10 -Wl,-e_efi_main -lgcc)
 
-add_executable(hello first.cpp ${GNUEFI}/lib/data.c)
-target_link_libraries(hello)
+add_library(hello SHARED first.cpp data.c)
+target_link_libraries(hello ${LDFLAGS})
+
+set(GNUEFILIB ${GNUEFI}/lib/data.c ${GNUEFI}/lib/str.c ${GNUEFI}/lib/print.c)
+
+add_library(hello2 SHARED second.cpp ${GNUEFILIB})
+target_link_libraries(hello2 ${LDFLAGS})
+
