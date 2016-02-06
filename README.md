@@ -41,6 +41,7 @@ I have prepared a CMake but it is fundamental to specify the cross-compiler to C
 Deployment of the example hello is:
 
 	make &&	mcopy -oi fat.img src/libhello.dll ::/EFI/BOOT/BOOTX64.EFI
+	make &&	mcopy -oi fat.img src/libhello2.dll ::/EFI/BOOT/BOOTX64.EFI
 
 ##Manually Mount##
 
@@ -85,8 +86,7 @@ A cool feature of VirtualBox is that, if your UEFI application has not crashed, 
 
 ###VirtualBox Issue###
 
-VirtualBox was not sending keys to the UEFI application. The driver can be found here: http://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/EFI/Firmware/IntelFrameworkModulePkg/Csm/BiosThunk/KeyboardDxe/BiosKeyboard.c  
-
+VirtualBox is not sending keys to the UEFI application, for the moment.
 
 #Future#
 
