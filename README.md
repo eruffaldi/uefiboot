@@ -27,7 +27,7 @@ sudo apt-get install qemu binutils-mingw-w64 gcc-mingw-w64 xorriso mtools
 ##Build##
 I have prepared a CMake but it is fundamental to specify the cross-compiler to CMake, for example under OSX
 
-	cmake -DCMAKE_TOOLCHAIN_FILE=/Applications/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake
+	cmake -DCMAKE_TOOLCHAIN_FILE=/Applications/mxe/usr/x86_64-w64-mingw32.static/share/cmake/mxe-conf.cmake
 
 ##Prepare Image##
 
@@ -60,10 +60,11 @@ Unmounting requires detach, WHERE /dev/disk2 is our disk
 
 Following the instruction from OSDEV it is needed QEmu and the OVMF firmware (http://tianocore.sourceforge.net/wiki/OVMF). Then the boot is straightforward after having installed qemu and placed OVMF.fd somewhee:
 	
-	qemu-system-x86_64 -L OVMF_dir/ -bios OVMF.fd -monitor stdio -nographic -drive file=fat.img,if=ide,id=drive-ide0-0-0
+	qemu-system-x86_64 -L OVMF_dir/ -bios OVMF.fd -drive file=fat.img,if=ide,id=drive-ide0-0-0
 
 	#-usb -usbdevice disk::fat.img
 
+FS0:\EFI\BOOT\BOOX64.EFI
 #Testing with VirtualBox#
 
 ##Setup##
@@ -95,6 +96,10 @@ A cool feature of VirtualBox is that, if your UEFI application has not crashed, 
 ###VirtualBox Issue###
 
 VirtualBox is not sending keys to the UEFI application, for the moment. Implementation is found: https://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/EFI/Firmware/MdeModulePkg/Bus/Usb/UsbKbDxe/EfiKey.c 
+
+#Building gnu_efi with mxe#
+
+CROSS_COMPILE=x86_64-w64-mingw32.static- PREFIX=/Applications/mxe/usr/x86_64-w64-mingw32.static/ prefix=/Applications/mxe/usr/bin/ make ARCH=x86_64
 
 #Future ideas#
 

@@ -1,6 +1,7 @@
 	.text
+	.def setjmp
 	.globl	setjmp
-	.type	setjmp, @function
+	#.type	setjmp, @function
 setjmp:
 	pop	%rsi
 	movq	%rbx,0x00(%rdi)
@@ -14,9 +15,11 @@ setjmp:
 	movq	%rsi,0x38(%rdi)
 	xor	%rax,%rax
 	ret
+	.endef
 
+	.def longjmp
 	.globl	longjmp
-	.type	longjmp, @function
+#	.type	longjmp, @function
 longjmp:
 	movl	%esi, %eax
 	movq	0x00(%rdi), %rbx
@@ -31,3 +34,4 @@ longjmp:
 	cmp	%rax,%rdx
 	cmove	%rcx,%rax
 	jmp	*0x38(%rdi)
+	.endef

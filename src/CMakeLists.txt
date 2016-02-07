@@ -6,7 +6,9 @@ include_directories(${GNUEFI}/inc ${PROJECT_SOURCE_DIR}/include ${GNUEFI}/inc/x8
 set(COMMONFLAGS "-DGNU_EFI_USE_MS_ABI -fshort-wchar -ffreestanding -mno-red-zone -fno-stack-protector -maccumulate-outgoing-args -Wall -Werror")
 #subsystem 10 is application
 #REMOVED -Wl,-znocombreloc
-set(LDFLAGS -nostdlib -Wl,-dll -shared -Wl,--subsystem,10 -Wl,-e_efi_main -lgcc -Wl,-Bsymbolic -Wl,-nostdlib)
+
+# NOTE: under 32bit is _efi_main
+set(LDFLAGS -nostdlib -Wl,-dll -shared -Wl,--subsystem,10 -Wl,-eefi_main -lgcc -Wl,-Bsymbolic -Wl,-nostdlib)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 ${COMMONFLAGS}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --std=c11 ${COMMONFLAGS}")

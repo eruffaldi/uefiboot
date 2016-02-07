@@ -13,8 +13,9 @@ BASIS,
  * IMPLIED.
  */
 	.text
+	.def setjmp
 	.globl	setjmp
-	.type	setjmp, @function
+	#.type	setjmp, @function
 setjmp:
 	pop	%ecx
 	movl	(%esp), %edx
@@ -25,9 +26,10 @@ setjmp:
 	movl	%esp, 16(%edx)
 	xorl	%eax, %eax
 	jmp	*%ecx
-
+	.endef 
+	.def longjmp
 	.globl	longjmp
-	.type	longjmp, @function
+	#.type	longjmp, @function
 longjmp:
 	pop	%eax
 	pop	%edx
@@ -35,3 +37,4 @@ longjmp:
 	movl	(%edx), %ebx
 	movl	4(%edx), %esi
 	movl	8(%edx), %edi
+	.endef

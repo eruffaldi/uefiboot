@@ -77,7 +77,7 @@ mkvars:
 $(SUBDIRS):
 	mkdir -p $(OBJDIR)/$@
 	$(MAKE) -C $(OBJDIR)/$@ -f $(SRCDIR)/$@/Makefile SRCDIR=$(SRCDIR)/$@ ARCH=$(ARCH)
-
+	
 clean:
 	rm -f *~
 	@for d in $(SUBDIRS); do \

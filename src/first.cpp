@@ -17,43 +17,43 @@ extern "C"
       ST = SystemTable;
     
       /* Disable Watchdog */
-      ST->BootServices->SetWatchdogTimer(0, 0, 0, (CHAR16*) NULL);
+      uefi_call_wrapper(ST->BootServices->SetWatchdogTimer,4,0, 0, 0, (CHAR16*) NULL);
 
       //Flashes cleans the console
       //Status = ST->ConOut->Reset(ST->ConOut, FALSE);
       /* Say hi */
-      Status = ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Hello World!!\n\r");
+      Status = uefi_call_wrapper(ST->ConOut->OutputString,2,ST->ConOut, (CHAR16*) L"Hello World!!\n\r");
       //if (EFI_ERROR(Status))
       //return Status;
    
-      Status = ST->ConIn->Reset(ST->ConIn, FALSE);
+      Status = uefi_call_wrapper(ST->ConIn->Reset,2,ST->ConIn, FALSE);
       if (EFI_ERROR(Status))
       {
-          ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Reset Key failed\n\r");
+          uefi_call_wrapper(ST->ConOut->OutputString,2,ST->ConOut, (CHAR16*) L"Reset Key failed\n\r");
           return Status;
       }
     
       // test for multicore
       void * MpProto = 0;
       EFI_GUID mpg = EFI_MP_SERVICES_PROTOCOL_GUID;
-      Status = ST->BootServices->LocateProtocol( &mpg, NULL, &MpProto);
+      Status = uefi_call_wrapper(ST->BootServices->LocateProtocol,3, &mpg, NULL, &MpProto);
       if(Status == EFI_SUCCESS)
       {
-          ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Has MP\n\r");        
+          uefi_call_wrapper(ST->ConOut->OutputString,2,ST->ConOut, (CHAR16*) L"Has MP\n\r");        
       }
 
       //while ((Status = ST->ConIn->ReadKeyStroke(ST->ConIn, &Key)) == EFI_NOT_READY) ; // polling from OSDEV example
-      Status = ST->BootServices->WaitForEvent(1, &ST->ConIn->WaitForKey, &index);
+      Status = uefi_call_wrapper(ST->BootServices->WaitForEvent,3,1, &ST->ConIn->WaitForKey, &index);
       if (EFI_ERROR(Status))
       {
-          ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Wait Key failed\n\r");
+          uefi_call_wrapper(ST->ConOut->OutputString,2,ST->ConOut, (CHAR16*) L"Wait Key failed\n\r");
           return Status;        
       }
       else
       {
-          ST->ConOut->OutputString(ST->ConOut,(CHAR16*) L"Wait Key succeded\n\r");
-          while ((Status = ST->ConIn->ReadKeyStroke(ST->ConIn, &Key)) == EFI_NOT_READY) ; // polling from OSDEV example
-          ST->ConOut->OutputString(ST->ConOut,(CHAR16*) L"Wait Key received\n\r");
+          uefi_call_wrapper(ST->ConOut->OutputString,2,ST->ConOut,(CHAR16*) L"Wait Key succeded\n\r");
+          while ((Status = uefi_call_wrapper(ST->ConIn->ReadKeyStroke,2,ST->ConIn, &Key)) == EFI_NOT_READY) ; // polling from OSDEV example
+          uefi_call_wrapper(ST->ConOut->OutputString,2,ST->ConOut,(CHAR16*) L"Wait Key received\n\r");
       }
    
       return EFI_SUCCESS;
