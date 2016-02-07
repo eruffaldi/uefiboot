@@ -21,7 +21,7 @@ extern "C"
       //Flashes cleans the console
       //Status = ST->ConOut->Reset(ST->ConOut, FALSE);
       /* Say hi */
-      Status = ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Hello World Press two keys!!\n\r");
+      Status = ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Hello World!!\n\r");
       //if (EFI_ERROR(Status))
       //return Status;
    
@@ -36,17 +36,12 @@ extern "C"
       Status = ST->BootServices->WaitForEvent(1, &ST->ConIn->WaitForKey, &index);
       if (EFI_ERROR(Status))
       {
-          ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Wait Key failed\n\r");
           return Status;        
       }
       else
       {
-          ST->ConIn->ReadKeyStroke(ST->ConIn, &Key);
-          CHAR16 buf[128];
-          SPrint(buf,sizeof(buf),(CHAR16*)L"Wait Key success %d\n\r",Key.UnicodeChar);
-          ST->ConOut->OutputString(ST->ConOut, buf);          
+          ST->ConIn->ReadKeyStroke(ST->ConIn, &Key);          
       }
-      Status = ST->BootServices->WaitForEvent(1, &ST->ConIn->WaitForKey, &index);
    
       return EFI_SUCCESS;
   }

@@ -2,11 +2,7 @@
 by Emanuele Ruffaldi
 using CMake,mxe and VirtualBox/Qemu
 
-Related instructiosn from OSDEV: http://wiki.osdev.org/UEFI_Bare_Bones
-Other related project (Make+QEmu): 
-	- https://github.com/tqh/efi-example 
-	- http://www.rodsbooks.com/efi-programming/hello.html
-
+There are two ways to make UEFI applications due to the fact that they are PE executables following Microsoft function call convention. The first is via a ELF Linux toolchain coupled with the extraction of the binary and relocation of the symbols. This is the path followed by the Haiku example [2] originated from the full Gnu EFI library. The second way adopted here is based on a cross compiler that builds Windows 64-bit applications as also discussed in OSDEV [1]. Here will use MXE supporting both Linux and OSX as hosting compilers. While 32-bit EFI are possible here we'll support only 64-bit.
 
 Requirements:
 - GCC Cross Compiler x86_64-w64-mingw32. MXE is fine
@@ -18,9 +14,11 @@ Requirements:
 Install mxe and then with MacPort install MTools
 
 ##Linux##
-Following OSDEV:
+Following OSDEV [1] the requirements are satisfied with the following, in addition to mxe:
 
-sudo apt-get install qemu binutils-mingw-w64 gcc-mingw-w64 xorriso mtools
+sudo apt-get install qemu binutils-mingw-w64  mtools
+
+Mxe can be replaced also by gcc-mingw-w64 but then custom scripts are needed for building additional packages
 
 #Build#
 
@@ -62,22 +60,23 @@ Following the instruction from OSDEV it is needed QEmu and the OVMF firmware (ht
 	
 	qemu-system-x86_64 -L OVMF_dir/ -bios OVMF.fd -drive file=fat.img,if=ide,id=drive-ide0-0-0
 
-	#-usb -usbdevice disk::fat.img
-
-FS0:\EFI\BOOT\BOOX64.EFI
 #Testing with VirtualBox#
 
 ##Setup##
 
-Creation
+Creation of VM
 
 	VM='MyUEFI'
 	VBoxManage createvm --name $VM --ostype "Other" --register
 	VBoxManage modifyvm $VM --ioapic on
 	VBoxManage modifyvm $VM --boot1 floppy
 	VBoxManage modifyvm $VM --memory 1024 --vram 128
-	VBoxManage modifyvm $VM --firmware efi
+	VBoxManage modifyvm $VM --firmware efi64
 	VboxManage storagectl $VM --name "Floppy" --add floppy
+
+For verification:
+
+	VBoxManage debugvm $VM osinfo
 
 Finally we specify our image
 
@@ -93,11 +92,10 @@ Thanks to the startup.nsh VirtualBox will boot into our UEFI applications otherw
 
 A cool feature of VirtualBox is that, if your UEFI application has not crashed, you can run it again with \EFI\BOOT\BOOTX64.EFI without rebooting the Virtual Machine. Just press arrow up.
 
-###VirtualBox Issue###
-
-VirtualBox is not sending keys to the UEFI application, for the moment. Implementation is found: https://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/EFI/Firmware/MdeModulePkg/Bus/Usb/UsbKbDxe/EfiKey.c 
 
 #Building gnu_efi with mxe#
+
+Not fully working
 
 CROSS_COMPILE=x86_64-w64-mingw32.static- PREFIX=/Applications/mxe/usr/x86_64-w64-mingw32.static/ prefix=/Applications/mxe/usr/bin/ make ARCH=x86_64
 
@@ -109,6 +107,10 @@ CROSS_COMPILE=x86_64-w64-mingw32.static- PREFIX=/Applications/mxe/usr/x86_64-w64
 - Network
 - UGA Graphics
 
+#References#1
 
+[1] Related instructiosn from OSDEV: http://wiki.osdev.org/UEFI_Bare_Bones
+[2] Other related project (Make+QEmu): https://github.com/tqh/efi-example 
+[3] http://www.rodsbooks.com/efi-programming/hello.html
 
 
