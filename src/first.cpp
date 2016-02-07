@@ -2,6 +2,7 @@ extern "C"
 {
 #include <efi.h>
 #include <efilib.h>
+#include <MPService.h>
 }
 
 extern "C"
@@ -31,7 +32,16 @@ extern "C"
           ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Reset Key failed\n\r");
           return Status;
       }
-   
+    
+      // test for multicore
+      void * MpProto = 0;
+      EFI_GUID mpg = EFI_MP_SERVICES_PROTOCOL_GUID;
+      Status = ST->BootServices->LocateProtocol( &mpg, NULL, &MpProto);
+      if(Status == EFI_SUCCESS)
+      {
+          ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Has MP\n\r");        
+      }
+
       //while ((Status = ST->ConIn->ReadKeyStroke(ST->ConIn, &Key)) == EFI_NOT_READY) ; // polling from OSDEV example
       Status = ST->BootServices->WaitForEvent(1, &ST->ConIn->WaitForKey, &index);
       if (EFI_ERROR(Status))

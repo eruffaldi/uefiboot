@@ -93,7 +93,7 @@ VirtualBox is not sending keys to the UEFI application, for the moment. Implemen
 #Future ideas#
 
 - Timer (http://kurtqiao.github.io/uefi/2015/01/06/wait-for-event.html)
-- Multicore
+- Multiprocessing with EfiMpServiceProtocol (not in GCC EFI) (http://www.uefi.org/sites/default/files/resources/Plugfest_Multiprocessing-with_UEFI-McDaniel.pdf)
 - Floating point
 - Network
 - UGA Graphics

@@ -1,6 +1,6 @@
 set(GNUEFI ${PROJECT_SOURCE_DIR}/gnu_efi)
 
-include_directories(${GNUEFI}/inc ${GNUEFI}/inc/x86_64 ${GNUEFI}/inc/protocol ${GNUEFI}/lib)
+include_directories(${GNUEFI}/inc ${PROJECT_SOURCE_DIR}/include ${GNUEFI}/inc/x86_64 ${GNUEFI}/inc/protocol ${GNUEFI}/lib)
 
 #REMOVED -fPIC -m64 
 set(COMMONFLAGS "-DGNU_EFI_USE_MS_ABI -fshort-wchar -ffreestanding -mno-red-zone -fno-stack-protector -maccumulate-outgoing-args -Wall -Werror")
