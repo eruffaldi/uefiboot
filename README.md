@@ -3,13 +3,15 @@ by Emanuele Ruffaldi
 using CMake,mxe and VirtualBox
 
 Related instructiosn from OSDEV: http://wiki.osdev.org/UEFI_Bare_Bones
-Other related project (Make+QEmu): https://github.com/tqh/efi-example http://www.rodsbooks.com/efi-programming/hello.html
+Other related project (Make+QEmu): 
+	- https://github.com/tqh/efi-example 
+	- http://www.rodsbooks.com/efi-programming/hello.html
 
 
 Requirements:
 - GCC Cross Compiler x86_64-w64-mingw32. MXE is fine
 - MTools 
-- GNU-efi package. I have embedded in this example version 3.0.3
+- GNU-efi package. I have embedded in this example version 3.0.3 having not an official github. Other github do exists such as https://github.com/vathpela/gnu-efi
 
 ##OSX##
 
@@ -86,10 +88,16 @@ A cool feature of VirtualBox is that, if your UEFI application has not crashed, 
 
 ###VirtualBox Issue###
 
-VirtualBox is not sending keys to the UEFI application, for the moment.
+VirtualBox is not sending keys to the UEFI application, for the moment. Implementation is found: https://www.virtualbox.org/svn/vbox/trunk/src/VBox/Devices/EFI/Firmware/MdeModulePkg/Bus/Usb/UsbKbDxe/EfiKey.c 
 
-#Future#
+#Future ideas#
 
-Examples online of Timer: http://kurtqiao.github.io/uefi/2015/01/06/wait-for-event.html
+- Timer (http://kurtqiao.github.io/uefi/2015/01/06/wait-for-event.html)
+- Multicore
+- Floating point
+- Network
+- UGA Graphics
+
+
 
 

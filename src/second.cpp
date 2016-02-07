@@ -28,7 +28,7 @@ extern "C"
       Status = ST->ConIn->Reset(ST->ConIn, FALSE);
       if (EFI_ERROR(Status))
       {
-          EFI_STATUS Status2 = ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Reset Key failed\n\r");
+          ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Reset Key failed\n\r");
           return Status;
       }
    

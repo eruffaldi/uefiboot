@@ -28,7 +28,7 @@ extern "C"
       Status = ST->ConIn->Reset(ST->ConIn, FALSE);
       if (EFI_ERROR(Status))
       {
-          EFI_STATUS Status2 = ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Reset Key failed\n\r");
+          ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Reset Key failed\n\r");
           return Status;
       }
    
@@ -42,6 +42,8 @@ extern "C"
       else
       {
           ST->ConOut->OutputString(ST->ConOut,(CHAR16*) L"Wait Key succeded\n\r");
+          while ((Status = ST->ConIn->ReadKeyStroke(ST->ConIn, &Key)) == EFI_NOT_READY) ; // polling from OSDEV example
+          ST->ConOut->OutputString(ST->ConOut,(CHAR16*) L"Wait Key received\n\r");
       }
    
       return EFI_SUCCESS;
