@@ -141,8 +141,12 @@ typedef struct _LIST_ENTRY {
 //
 //  EFI_FIELD_OFFSET - returns the byte offset to a field within a structure
 //
+#ifndef offsetof
+#define offsetof(st, m) __builtin_offsetof(st, m)
+#endif
 
-#define EFI_FIELD_OFFSET(TYPE,Field) ((UINTN)(uint64_t)(&(((TYPE *) 0)->Field)))
+#define EFI_FIELD_OFFSET(TYPE,Field) offsetof(TYPE,Field) 
+//((UINTN)(uint64_t)(&(((TYPE *) 0)->Field)))
 
 //
 //  CONTAINING_RECORD - returns a pointer to the structure

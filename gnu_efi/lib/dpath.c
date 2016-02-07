@@ -303,7 +303,7 @@ DevicePathSize (
     // Compute the size
     //
 
-    return ((UINTN) DevPath - (UINTN) Start) + sizeof(EFI_DEVICE_PATH);
+    return (DevPath - Start) + sizeof(EFI_DEVICE_PATH);
 }
 
 EFI_DEVICE_PATH *
@@ -933,10 +933,13 @@ _DevPathHardDrive (
     Hd = DevPath;
     switch (Hd->SignatureType) {
         case SIGNATURE_TYPE_MBR:
+            {
+            UINT32 * p = (UINT32 *)(&(Hd->Signature[0]));
             CatPrint(Str, L"HD(Part%d,Sig%08X)", 
                 Hd->PartitionNumber,
-                *((UINT32 *)(&(Hd->Signature[0])))
+                *p
                 );
+            }
             break;
         case SIGNATURE_TYPE_GUID:
             CatPrint(Str, L"HD(Part%d,Sig%g)", 

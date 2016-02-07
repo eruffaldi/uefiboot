@@ -8,8 +8,8 @@ set(COMMONFLAGS "-DGNU_EFI_USE_MS_ABI -fshort-wchar -ffreestanding -mno-red-zone
 #REMOVED -Wl,-znocombreloc
 set(LDFLAGS -nostdlib -Wl,-dll -shared -Wl,--subsystem,10 -Wl,-e_efi_main -lgcc -Wl,-Bsymbolic -Wl,-nostdlib)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMONFLAGS}")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMONFLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 ${COMMONFLAGS}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --std=c11 ${COMMONFLAGS}")
 
 
 add_library(hello SHARED first.cpp data.c)
