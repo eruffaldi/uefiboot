@@ -1,6 +1,6 @@
 #UEFI Bare Bone Exercise#
 by Emanuele Ruffaldi
-using CMake,mxe and VirtualBox
+using CMake,mxe and VirtualBox/Qemu
 
 Related instructiosn from OSDEV: http://wiki.osdev.org/UEFI_Bare_Bones
 Other related project (Make+QEmu): 
@@ -56,9 +56,15 @@ Unmounting requires detach, WHERE /dev/disk2 is our disk
 
 	hdiutil detach /dev/disk2
 
-#Testing with VirtualBox#
+#Testing with QEmu#
 
-In OSDEV you can find QEmu instructions using the OVMF firmware. I have tested with VirtualBox booting a VM with the specified FAT image
+Following the instruction from OSDEV it is needed QEmu and the OVMF firmware (http://tianocore.sourceforge.net/wiki/OVMF). Then the boot is straightforward after having installed qemu and placed OVMF.fd somewhee:
+	
+	qemu-system-x86_64 -L OVMF_dir/ -bios OVMF.fd -monitor stdio -nographic -drive file=fat.img,if=ide,id=drive-ide0-0-0
+
+	#-usb -usbdevice disk::fat.img
+
+#Testing with VirtualBox#
 
 ##Setup##
 
