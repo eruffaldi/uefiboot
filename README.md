@@ -92,25 +92,24 @@ Thanks to the startup.nsh VirtualBox will boot into our UEFI applications otherw
 
 A cool feature of VirtualBox is that, if your UEFI application has not crashed, you can run it again with \EFI\BOOT\BOOTX64.EFI without rebooting the Virtual Machine. Just press arrow up.
 
+#Multiprocessing#
 
-#Building gnu_efi with mxe#
+Traditionally MP has been quite boring to be initialized due to the direct exchange with the APIC plus the preparation of the MP memory structures (see smpboot.c in Linux and the Intel MP Specification). UEFI makes things much easier firstly because it already initializes the AP and then picks one processor as the BSP (Boot Strap Processor). Then there are two possible UEFI protocols that allows for managing tasks over the AP, one is EfiMpServiceProtocol, the other TODO. As discussed in [5] it is quite uncommon to have none of such protocols, and then, if they are totally missing, it only remains to scan the CPU configuration via CPUID plus starting directly tasks over the APs with INIT-SIP1. Even in this latter case the AP are ready for work. What is important to highlight is that UEFI services can be called safely only from the BSP, meaning that we need to initialize peripherals, or, alternatively to use AP as worker processors.
 
-Not fully working
-
-CROSS_COMPILE=x86_64-w64-mingw32.static- PREFIX=/Applications/mxe/usr/x86_64-w64-mingw32.static/ prefix=/Applications/mxe/usr/bin/ make ARCH=x86_64
+Data exchange and synchronization between the CPUs can be performed with the CPU atomic instructions, and, maybe even at high-level with C++11 atomic constructs that are directly based on assembly instructions.
 
 #Future ideas#
+This is an exercises for harnessing the power of UEFI, without the aim of making a pseudo-OS, but, anyway there are interesting services and aspect of UEFI that can be looked at for making it usable:
 
 - Timer (http://kurtqiao.github.io/uefi/2015/01/06/wait-for-event.html)
-- Multiprocessing with EfiMpServiceProtocol (not in GCC EFI) (http://www.uefi.org/sites/default/files/resources/Plugfest_Multiprocessing-with_UEFI-McDaniel.pdf)
-- Floating point
+- Floating point issues
 - Network
 - UGA Graphics
 
-#References#1
+#References#
 
 [1] Related instructiosn from OSDEV: http://wiki.osdev.org/UEFI_Bare_Bones
 [2] Other related project (Make+QEmu): https://github.com/tqh/efi-example 
 [3] http://www.rodsbooks.com/efi-programming/hello.html
-
-
+[4] http://www.uefi.org/sites/default/files/resources/Plugfest_Multiprocessing-with_UEFI-McDaniel.pdf)
+[5]
