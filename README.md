@@ -40,6 +40,7 @@ I have prepared a CMake but it is fundamental to specify the cross-compiler to C
 
 Deployment of the example hello is:
 
+	make &&	mcopy -oi fat.img src/checkmp.dll ::/EFI/BOOT/BOOTX64.EFI
 	make &&	mcopy -oi fat.img src/libhello.dll ::/EFI/BOOT/BOOTX64.EFI
 	make &&	mcopy -oi fat.img src/libhello2.dll ::/EFI/BOOT/BOOTX64.EFI
 
@@ -58,7 +59,7 @@ Unmounting requires detach, WHERE /dev/disk2 is our disk
 
 Following the instruction from OSDEV it is needed QEmu and the OVMF firmware (http://tianocore.sourceforge.net/wiki/OVMF). Then the boot is straightforward after having installed qemu and placed OVMF.fd somewhee:
 	
-	qemu-system-x86_64 -L OVMF_dir/ -bios OVMF.fd -drive file=fat.img,if=ide,id=drive-ide0-0-0
+	qemu-system-x86_64 -smp 2 -cpu host -L OVMF_dir/ -bios OVMF.fd -drive file=fat.img,if=ide,id=drive-ide0-0-0
 
 #Testing with VirtualBox#
 
@@ -94,13 +95,17 @@ A cool feature of VirtualBox is that, if your UEFI application has not crashed, 
 
 #Multiprocessing#
 
-Traditionally MP has been quite boring to be initialized due to the direct exchange with the APIC plus the preparation of the MP memory structures (see smpboot.c in Linux and the Intel MP Specification). UEFI makes things much easier firstly because it already initializes the AP and then picks one processor as the BSP (Boot Strap Processor). Then there are two possible UEFI protocols that allows for managing tasks over the AP, one is EfiMpServiceProtocol, the other TODO. As discussed in [5] it is quite uncommon to have none of such protocols, and then, if they are totally missing, it only remains to scan the CPU configuration via CPUID plus starting directly tasks over the APs with INIT-SIP1. Even in this latter case the AP are ready for work. What is important to highlight is that UEFI services can be called safely only from the BSP, meaning that we need to initialize peripherals, or, alternatively to use AP as worker processors.
+Traditionally MP has been quite boring to be initialized due to the direct exchange with the APIC plus the preparation of the MP memory structures (see smpboot.c in Linux [7] and the Intel MP Specification). UEFI makes things much easier firstly because it already initializes the AP and then picks one processor as the BSP (Boot Strap Processor). Then there are two possible UEFI protocols that allows for managing tasks over the AP, one is EfiMpServiceProtocol, the other TODO. As discussed in [5] it is quite uncommon to have none of such protocols, and then, if they are totally missing, it only remains to scan the CPU configuration via CPUID plus starting directly tasks over the APs with INIT-SIP1. Even in this latter case the AP are ready for work. What is important to highlight is that UEFI services can be called safely only from the BSP, meaning that we need to initialize peripherals, or, alternatively to use AP as worker processors.
+
+The example checkmp tries to check these two protocols. So far nor VirtualBox or QEmu support one of these protocols. The support of these protocols in TianoCore is documented in [11], while [12] provides an example applications.
 
 Data exchange and synchronization between the CPUs can be performed with the CPU atomic instructions, and, maybe even at high-level with C++11 atomic constructs that are directly based on assembly instructions.
+
 
 #Future ideas#
 This is an exercises for harnessing the power of UEFI, without the aim of making a pseudo-OS, but, anyway there are interesting services and aspect of UEFI that can be looked at for making it usable:
 
+- Multiprocessing CPUID [10]
 - Timer (http://kurtqiao.github.io/uefi/2015/01/06/wait-for-event.html)
 - Floating point issues
 - Network
@@ -115,4 +120,11 @@ EFI_MP_SERVICES_PROTOCOL_GUID
 [2] Other related project (Make+QEmu): https://github.com/tqh/efi-example 
 [3] http://www.rodsbooks.com/efi-programming/hello.html
 [4] http://www.uefi.org/sites/default/files/resources/Plugfest_Multiprocessing-with_UEFI-McDaniel.pdf)
-[5]
+[5] http://board.flatassembler.net/topic.php?t=16187
+[6] http://developer.amd.com/resources/documentation-articles/articles-whitepapers/processor-and-core-enumeration-using-cpuid/
+[7] http://www.tldp.org/HOWTO/Linux-i386-Boot-Code-HOWTO/smpboot.html
+[8] http://x86asm.net/articles/uefi-programming-first-steps/
+[9] http://wiki.phoenix.com/wiki/index.php/EFI_BOOT_SERVICES#LocateProtocol.28.29
+[10] http://www.microbe.cz/docs/CPUID.pdf
+[11] https://github.com/tianocore/tianocore.github.io/wiki/Tasks-UefiCpuPkg-CpuDxe-MP-support
+[12] https://svn.code.sf.net/p/edk2-startcore/code/StartCorePkg/StartCore/

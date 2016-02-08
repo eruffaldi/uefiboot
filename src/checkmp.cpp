@@ -4,6 +4,7 @@ extern "C"
 #include <efilib.h>
 #include <MPService.h>
 #include <FrameworkMPService.h>
+#include <cpuid.h>
 }
 
 extern "C"
@@ -48,6 +49,8 @@ extern "C"
           ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Has MP2\n\r");        
       }
       Status = ST->ConOut->OutputString(ST->ConOut, (CHAR16*) L"Press a Key to exit\n\r");
+
+
 
       //while ((Status = ST->ConIn->ReadKeyStroke(ST->ConIn, &Key)) == EFI_NOT_READY) ; // polling from OSDEV example
       Status = ST->BootServices->WaitForEvent(1, &ST->ConIn->WaitForKey, &index);
