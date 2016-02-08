@@ -20,4 +20,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --std=c11 ${COMMONFLAGS}")
 add_library(hello SHARED hello.cpp data.c)
 target_link_libraries(hello ${LDFLAGS})
 
+add_library(checkmp SHARED checkmp.cpp data.c)
+target_link_libraries(checkmp ${LDFLAGS})
 

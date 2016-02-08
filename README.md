@@ -106,6 +106,9 @@ This is an exercises for harnessing the power of UEFI, without the aim of making
 - Network
 - UGA Graphics
 
+EFI_FRAMEWORK_MP_SERVICES_PROTOCOL_GUID
+EFI_MP_SERVICES_PROTOCOL_GUID
+
 #References#
 
 [1] Related instructiosn from OSDEV: http://wiki.osdev.org/UEFI_Bare_Bones
