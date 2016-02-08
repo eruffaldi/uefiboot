@@ -3,7 +3,7 @@ extern "C"
 #include <efi.h>
 #include <efilib.h>
 #include <MPService.h>
-#include <MPFrameworkService.h>
+#include <FrameworkMPService.h>
 }
 
 extern "C"
@@ -36,7 +36,7 @@ extern "C"
     
       void * MpProto1 = 0, *MpProto2 = 0;
       EFI_GUID mpg1 = EFI_MP_SERVICES_PROTOCOL_GUID;
-      EFI_GUID mpg2 = EFI_FRAMEWORK_MP_SERVICES_PROTOCOL_GUID;
+      EFI_GUID mpg2 = FRAMEWORK_EFI_MP_SERVICES_PROTOCOL_GUID;
       Status = ST->BootServices->LocateProtocol( &mpg1, NULL, &MpProto1);
       if(Status == EFI_SUCCESS)
       {
