@@ -1,4 +1,4 @@
-# UEFI Bare Bone Exercise#
+# UEFI Bare Bone Exercise
 by Emanuele Ruffaldi
 using CMake,mxe and VirtualBox/Qemu
 
