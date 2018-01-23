@@ -1,4 +1,4 @@
-#UEFI Bare Bone Exercise#
+# UEFI Bare Bone Exercise#
 by Emanuele Ruffaldi
 using CMake,mxe and VirtualBox/Qemu
 
@@ -9,7 +9,7 @@ Requirements:
 - MTools 
 - GNU-efi package. I have embedded in this example version 3.0.3 having not an official github. Other github do exists such as https://github.com/vathpela/gnu-efi
 
-##OSX##
+## OSX ##
 
 Install mxe and then with MacPort install MTools
 
@@ -20,14 +20,14 @@ sudo apt-get install qemu binutils-mingw-w64  mtools
 
 Mxe can be replaced also by gcc-mingw-w64 but then custom scripts are needed for building additional packages
 
-#Build#
+# Build #
 
-##Build##
+## Build ##
 I have prepared a CMake but it is fundamental to specify the cross-compiler to CMake, for example under OSX
 
 	cmake -DCMAKE_TOOLCHAIN_FILE=/Applications/mxe/usr/x86_64-w64-mingw32.static/share/cmake/mxe-conf.cmake
 
-##Prepare Image##
+## Prepare Imag e##
 
 	dd if=/dev/zero of=fat.img bs=1k count=1440
 	mformat -i fat.img -f 1440 ::
@@ -36,7 +36,7 @@ I have prepared a CMake but it is fundamental to specify the cross-compiler to C
 	echo "\EFI\BOOT\BOOTX64.EFI" > startup.nsh
 	mcopy -i fat.img startup.nsh ::/
 
-##Deploy##
+## Deploy ##
 
 Deployment of the example hello is:
 
@@ -44,7 +44,7 @@ Deployment of the example hello is:
 	make &&	mcopy -oi fat.img src/libhello.dll ::/EFI/BOOT/BOOTX64.EFI
 	make &&	mcopy -oi fat.img src/libhello2.dll ::/EFI/BOOT/BOOTX64.EFI
 
-##Manually Mount##
+## Manually Mount ##
 
 mcopy allows for managing the filesystem directly but sometimes it is good to mount the floppy. Under OSX image files needs to be mapped first as block devices and then mounted with mount:
 
@@ -61,9 +61,9 @@ Following the instruction from OSDEV it is needed QEmu and the OVMF firmware (ht
 	
 	qemu-system-x86_64 -smp 2 -cpu host -L OVMF_dir/ -bios OVMF.fd -drive file=fat.img,if=ide,id=drive-ide0-0-0
 
-#Testing with VirtualBox#
+# Testing with VirtualBox #
 
-##Setup##
+## Setup ##
 
 Creation of VM
 
@@ -93,7 +93,7 @@ Thanks to the startup.nsh VirtualBox will boot into our UEFI applications otherw
 
 A cool feature of VirtualBox is that, if your UEFI application has not crashed, you can run it again with \EFI\BOOT\BOOTX64.EFI without rebooting the Virtual Machine. Just press arrow up.
 
-#Multiprocessing#
+# Multiprocessing #
 
 Traditionally MP has been quite boring to be initialized due to the direct exchange with the APIC plus the preparation of the MP memory structures (see smpboot.c in Linux [7] and the Intel MP Specification). UEFI makes things much easier firstly because it already initializes the AP and then picks one processor as the BSP (Boot Strap Processor). Then there are two possible UEFI protocols that allows for managing tasks over the AP, one is EfiMpServiceProtocol, the other TODO. As discussed in [5] it is quite uncommon to have none of such protocols, and then, if they are totally missing, it only remains to scan the CPU configuration via CPUID plus starting directly tasks over the APs with INIT-SIP1. Even in this latter case the AP are ready for work. What is important to highlight is that UEFI services can be called safely only from the BSP, meaning that we need to initialize peripherals, or, alternatively to use AP as worker processors.
 
@@ -102,7 +102,7 @@ The example checkmp tries to check these two protocols. So far nor VirtualBox or
 Data exchange and synchronization between the CPUs can be performed with the CPU atomic instructions, and, maybe even at high-level with C++11 atomic constructs that are directly based on assembly instructions.
 
 
-#Future ideas#
+# Future ideas #
 This is an exercises for harnessing the power of UEFI, without the aim of making a pseudo-OS, but, anyway there are interesting services and aspect of UEFI that can be looked at for making it usable:
 
 - Multiprocessing CPUID [10]
@@ -114,7 +114,7 @@ This is an exercises for harnessing the power of UEFI, without the aim of making
 EFI_FRAMEWORK_MP_SERVICES_PROTOCOL_GUID
 EFI_MP_SERVICES_PROTOCOL_GUID
 
-#References#
+# References #
 
 [1] Related instructiosn from OSDEV: http://wiki.osdev.org/UEFI_Bare_Bones
 [2] Other related project (Make+QEmu): https://github.com/tqh/efi-example 
