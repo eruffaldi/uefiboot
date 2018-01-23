@@ -13,7 +13,7 @@ Requirements:
 
 Install mxe and then with MacPort install MTools
 
-##Linux##
+## Linux ##
 Following OSDEV [1] the requirements are satisfied with the following, in addition to mxe:
 
 sudo apt-get install qemu binutils-mingw-w64  mtools
@@ -55,7 +55,7 @@ Unmounting requires detach, WHERE /dev/disk2 is our disk
 
 	hdiutil detach /dev/disk2
 
-#Testing with QEmu#
+# Testing with QEmu #
 
 Following the instruction from OSDEV it is needed QEmu and the OVMF firmware (http://tianocore.sourceforge.net/wiki/OVMF). Then the boot is straightforward after having installed qemu and placed OVMF.fd somewhee:
 	
